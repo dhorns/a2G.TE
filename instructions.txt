@@ -1,0 +1,44 @@
+1) Enter the correct directory with
+
+	cd ~/opt/AR.TE/acqu_user
+
+2) Edit 'data/Server-TaggEff.dat' to ensure you're analyzing the correct data
+file.  At the moment there are two sets of three runs.  We have already done
+31833, 31834, and 31835, but you can try 31884, 31885, and 31886 next.
+Unfortunately, you need to run them individually, run by run.
+
+3) Run AcquRoot using the command 
+
+	../build/bin/AcquRoot Offline-TaggEff.dat
+
+The two background runs should be super quick, but the actual tagging
+efficiency run might take a few minutes to run.  The output should be in the
+directory 'ARout' and for each run consists of a histogram file (ARHist) and
+an output file needed by a2GoAT (Acqu).
+
+4) Go to the GoAT directory with
+
+	cd ~/opt/a2G.TE
+
+5) For each of the Acqu output files (not the histogram files), run the command
+
+	build/bin/TaggEff configfiles/NewTaggEff-Recabled.dat -f ARout/Acqu_TaggEff_<run#>.root -F out/goat_<run#>.root
+
+where you of course replace the <run#> with the actual run number.  The output
+files should be written to the 'out' directory.
+
+6) Now you run the macro TE.C on the a2GoAT output in a ROOT session.  Start
+ROOT like you always do, load the macro and then run the method TE with the
+name strings of the three a2GoAT output files:
+
+	.L TE.C
+	TE( "out/goat_31834.root", "out/goat_31833.root", "out/goat_31835.root")
+
+Make sure you put the main tagging efficiency run first, and then background
+run 1 (before) and background run 2 (after).
+
+This will produce and output file, also in the "out" directory, called
+"ExpBkgSub_<run#>.root" where the run number is given by the main tagging
+efficiency run, and not the background runs.
+
+You should then be able to open this file in ROOT and view the output!
