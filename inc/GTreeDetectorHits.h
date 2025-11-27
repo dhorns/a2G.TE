@@ -1,0 +1,115 @@
+#ifndef __GTreeDetectorHits_h__
+#define __GTreeDetectorHits_h__
+
+
+#include "Rtypes.h"
+#include "GTree.h"
+
+
+class  GTreeDetectorHits    : public GTree
+{
+private:
+    Int_t		nNaIHits;
+    Int_t		NaIHits[720];
+    Int_t		NaICluster[720];
+    Double_t    NaIEnergy[720];
+    Double_t    NaITime[720];
+
+    Int_t       nNaIADCs;
+    Int_t       NaIADCs[720];
+    Int_t       NaIADCsRaw[720];
+    Bool_t      NaIADCsHit[720];
+
+    Int_t       nNaITDCs;
+    Int_t       NaITDCs[720];
+    Int_t       NaITDCsRaw[720];
+    Bool_t      NaITDCsHit[720];
+
+    Int_t		nPIDHits;
+    Int_t		PIDHits[24];
+    Double_t    PIDEnergy[24];
+    Double_t    PIDTime[24];
+
+    Int_t		nMWPCHits;
+    Int_t		MWPCHits[860];
+
+    Int_t		nBaF2Hits;
+    Int_t		BaF2Hits[438];
+    Int_t		BaF2Cluster[438];
+    Double_t    BaF2Energy[438];
+    Double_t    BaF2Time[438];
+
+    Int_t		nVetoHits;
+    Int_t		VetoHits[438];
+    Double_t    VetoEnergy[438];
+    Double_t    VetoTime[438];
+
+protected:
+    virtual void    SetBranchAdresses();
+    virtual void    SetBranches();
+
+public:
+    GTreeDetectorHits(GTreeManager *Manager);
+    virtual ~GTreeDetectorHits();
+
+    virtual void            Clear()                         {nNaIHits=0; nNaIADCs=0; nNaITDCs=0; nPIDHits=0; nMWPCHits=0; nBaF2Hits=0; nVetoHits=0;}
+
+            Int_t		GetNNaIHits()              	const	{return nNaIHits;}
+    const	Int_t*		GetNaIHits()           		const	{return NaIHits;}
+            Int_t		GetNaIHits(const Int_t index)	const	{return NaIHits[index];}
+    const	Int_t*		GetNaICluster()           		const	{return NaICluster;}
+            Int_t		GetNaICluster(const Int_t index)	const	{return NaICluster[index];}
+    const	Double_t*	GetNaIEnergy()           		const	{return NaIEnergy;}
+            Double_t	GetNaIEnergy(const Int_t index)	const	{return NaIEnergy[index];}
+    const	Double_t*	GetNaITime()           		const	{return NaITime;}
+            Double_t	GetNaITime(const Int_t index)	const	{return NaITime[index];}
+
+            Int_t		GetNNaIADCs()              	const	{return nNaIADCs;}
+    const	Int_t*		GetNaIADCs()           		const	{return NaIADCs;}
+            Int_t		GetNaIADCs(const Int_t index)	const	{return NaIADCs[index];}
+    const	Int_t*		GetNaIADCsRaw()           		const	{return NaIADCsRaw;}
+            Int_t		GetNaIADCsRaw(const Int_t index)	const	{return NaIADCsRaw[index];}
+    const	Bool_t*		GetNaIADCsHit()           		const	{return NaIADCsHit;}
+            Bool_t		GetNaIADCsHit(const Int_t index)	const	{return NaIADCsHit[index];}
+
+            Int_t		GetNNaITDCs()              	const	{return nNaITDCs;}
+    const	Int_t*		GetNaITDCs()           		const	{return NaITDCs;}
+            Int_t		GetNaITDCs(const Int_t index)	const	{return NaITDCs[index];}
+    const	Int_t*		GetNaITDCsRaw()           		const	{return NaITDCsRaw;}
+            Int_t		GetNaITDCsRaw(const Int_t index)	const	{return NaITDCsRaw[index];}
+    const	Bool_t*		GetNaITDCsHit()           		const	{return NaITDCsHit;}
+            Bool_t		GetNaITDCsHit(const Int_t index)	const	{return NaITDCsHit[index];}
+
+            Int_t		GetNPIDHits()      			const	{return nPIDHits;}
+    const	Int_t*		GetPIDHits()               	const	{return PIDHits;}
+            Int_t		GetPIDHits(const Int_t index)	const	{return PIDHits[index];}
+    const	Double_t*	GetPIDEnergy()           		const	{return PIDEnergy;}
+            Double_t	GetPIDEnergy(const Int_t index)	const	{return PIDEnergy[index];}
+    const	Double_t*	GetPIDTime()           		const	{return PIDTime;}
+            Double_t	GetPIDTime(const Int_t index)	const	{return PIDTime[index];}
+
+            Int_t		GetNMWPCHits()       			const	{return nMWPCHits;}
+    const	Int_t*		GetMWPCHits()                	const	{return MWPCHits;}
+            Int_t		GetMWPCHits(const Int_t index)	const	{return MWPCHits[index];}
+
+            Int_t		GetNBaF2Hits()                   const	{return nBaF2Hits;}
+    const	Int_t*		GetBaF2Hits()                    const	{return BaF2Hits;}
+            Int_t		GetBaF2Hits(const Int_t index)	const	{return BaF2Hits[index];}
+    const	Int_t*		GetBaF2Cluster()                    const	{return BaF2Cluster;}
+            Int_t		GetBaF2Cluster(const Int_t index)	const	{return BaF2Cluster[index];}
+    const	Double_t*	GetBaF2Energy()           		const	{return BaF2Energy;}
+            Double_t	GetBaF2Energy(const Int_t index)	const	{return BaF2Energy[index];}
+    const	Double_t*	GetBaF2Time()           		const	{return BaF2Time;}
+            Double_t	GetBaF2Time(const Int_t index)	const	{return BaF2Time[index];}
+
+            Int_t		GetNVetoHits()                 const	{return nVetoHits;}
+    const	Int_t*		GetVetoHits()                  const	{return VetoHits;}
+            Int_t		GetVetoHits(const Int_t index)	const	{return VetoHits[index];}
+    const	Double_t*	GetVetoEnergy()           		const	{return VetoEnergy;}
+            Double_t	GetVetoEnergy(const Int_t index)	const	{return VetoEnergy[index];}
+    const	Double_t*	GetVetoTime()           		const	{return VetoTime;}
+            Double_t	GetVetoTime(const Int_t index)	const	{return VetoTime[index];}
+};
+
+
+#endif
