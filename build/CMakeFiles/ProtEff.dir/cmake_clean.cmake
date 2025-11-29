@@ -1,7 +1,11 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/ProtEff.dir/link.d"
   "CMakeFiles/ProtEff.dir/src/PPhysics.cc.o"
+  "CMakeFiles/ProtEff.dir/src/PPhysics.cc.o.d"
   "CMakeFiles/ProtEff.dir/src/PProtEff.cc.o"
+  "CMakeFiles/ProtEff.dir/src/PProtEff.cc.o.d"
   "CMakeFiles/ProtEff.dir/src/ProtEff_main.cc.o"
+  "CMakeFiles/ProtEff.dir/src/ProtEff_main.cc.o.d"
   "bin/ProtEff"
   "bin/ProtEff.pdb"
 )

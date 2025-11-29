@@ -37,8 +37,12 @@
 
 Message(STATUS "Looking for ROOT...")
 
+if(NOT "$ENV{ROOTSYS}" STREQUAL "")
+  set(ROOTSYS $ENV{ROOTSYS} CACHE PATH "Path to the ROOT installation directory")
+endif()
+
 Set(ROOT_CONFIG_SEARCHPATH
-  $ENV{ROOTSYS}/bin
+  ${ROOTSYS}/bin
   /opt/root/bin
   /cern/root/bin
   /etc/root/bin
@@ -55,8 +59,12 @@ Find_Program(ROOT_CONFIG_EXECUTABLE NAMES root-config
             )
      
 If(NOT ROOT_CONFIG_EXECUTABLE)
-  Message(STATUS "Looking for ROOT... - Not found")
-  Message(STATUS "ROOT not installed in the searchpath and ROOTSYS is not set. Please set ROOTSYS or add the path to your ROOT installation in the Macro FindROOT.cmake in the subdirectory cmake/Modules.")
+  Message(STATUS "Looking for ROOT with root-config... - Not found")
+  Message(STATUS "ROOT not installed in the searchpath and ROOTSYS is not set.")
+  Message(STATUS "Please set ROOTSYS or add the path to your ROOT installation in the Macro FindROOT.cmake in the subdirectory cmake/Modules.")
+  If(ROOT_FIND_REQUIRED)
+    Message(FATAL_ERROR "ROOT is required to build, exiting.")
+  endif()
   return()
 endif()
 
@@ -79,9 +87,9 @@ MESSAGE(STATUS "Looking for ROOT... - Found version is ${ROOT_VERSION_STRING} ")
    
 # extract major, minor, and patch versions from
 # the version string given by root-config
-String(REGEX REPLACE "^([0-9]+)\\.[0-9][0-9]+\\/[0-9][0-9]+.*" "\\1" ROOT_VERSION_MAJOR "${ROOT_VERSION_STRING}")
-String(REGEX REPLACE "^[0-9]+\\.([0-9][0-9])+\\/[0-9][0-9]+.*" "\\1" ROOT_VERSION_MINOR "${ROOT_VERSION_STRING}")
-String(REGEX REPLACE "^[0-9]+\\.[0-9][0-9]+\\/([0-9][0-9]+).*" "\\1" ROOT_VERSION_PATCH "${ROOT_VERSION_STRING}")
+String(REGEX REPLACE "^([0-9]+)\\.[0-9][0-9]+\\.[0-9][0-9]+.*" "\\1" ROOT_VERSION_MAJOR "${ROOT_VERSION_STRING}")
+String(REGEX REPLACE "^[0-9]+\\.([0-9][0-9])+\\.[0-9][0-9]+.*" "\\1" ROOT_VERSION_MINOR "${ROOT_VERSION_STRING}")
+String(REGEX REPLACE "^[0-9]+\\.[0-9][0-9]+\\.([0-9][0-9]+).*" "\\1" ROOT_VERSION_PATCH "${ROOT_VERSION_STRING}")
 
 # compute overall version numbers which can be compared at once
 Math(EXPR req_vers "${ROOT_FIND_VERSION_MAJOR}*10000 + ${ROOT_FIND_VERSION_MINOR}*100 + ${ROOT_FIND_VERSION_PATCH}")
@@ -98,13 +106,12 @@ EndIf()
 
 if(NOT ROOT_FOUND)
   If(ROOT_FIND_REQUIRED)
-    Message(STATUS "Looking for ROOT... - Found version to old.")
+    Message(STATUS "Looking for ROOT... - Found version too old.")
     Message(FATAL_ERROR "Looking for ROOT... - Minimum required version is ${ROOT_FIND_VERSION}")
   EndIf(ROOT_FIND_REQUIRED)
   # not required, ignore it
   return()
 endif()
-
 
 # ask root-config for the library dir
 # Set ROOT_LIBRARY_DIR
