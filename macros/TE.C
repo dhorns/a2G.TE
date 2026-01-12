@@ -140,7 +140,7 @@ void TE(TString sBeam, TString sBkg1, TString sBkg2)
 	TH1D *hBeamTaggScalers_ProjY;
 	TH2D *hBeamTaggScalersExpBkgSub = (TH2D*) hBeamTaggScalers -> Clone( "hBeamTaggScalersExpBkgSub");
 	
-	for ( Int_t iBeamScRd = 0; iBeamScRd < iBeamnScalerReads; iBeamScRd ++)
+	for ( Int_t iBeamScRd = 0; iBeamScRd < iBeamnScalerReads; iBeamScRd++)
 	{
 		tBeamScaler -> GetEntry(iBeamScRd);
 		Double_t dTimeScRd = iBeamScalers[191] * 1.E-6;
@@ -197,3 +197,71 @@ void TE(TString sBeam, TString sBkg1, TString sBkg2)
 	fOut.Write();
 	fOut.Close();
 }
+
+/*
+void TEsingle( UInt_t run_no)
+{
+	TString filename;
+
+	// Open the file
+	filename = Form( "goat_%d.root", run_no);
+	TFile fBeam( filename, "READ");
+	
+	TH1D *hBeamAllHits = (TH1D*)fBeam.Get( "TaggerAllHits");
+	TH1D *hBeamSingles = (TH1D*)fBeam.Get( "TaggerSingles");
+	TH1D *hBeamDoubles = (TH1D*)fBeam.Get( "TaggerDoubles");
+	TH2D *hBeamTaggScalers = (TH2D*) fBeam.Get( "TaggerScalers");
+
+	Double_t dBeamTimeScRd[2000];
+	Double_t dBeamRateScRdMean[2000];
+	TH1D *hBeamTaggScalers_ProjY;
+	TH2D *hBeamTaggScalersExpBkgSub = (TH2D*) hBeamTaggScalers -> Clone( "hBeamTaggScalersExpBkgSub");
+	
+	for ( Int_t iBeamScRd = 0; iBeamScRd < iBeamnScalerReads; iBeamScRd ++)
+	{
+		tBeamScaler -> GetEntry(iBeamScRd);
+		Double_t dTimeScRd = iBeamScalers[191] * 1.E-6;
+		if (iBeamScRd == 0) dBeamTimeScRd[(iBeamScRd)] = dTimeBeam + dTimeScRd; // offset
+		if (iBeamScRd > 0) dBeamTimeScRd[(iBeamScRd)] = dBeamTimeScRd[(iBeamScRd-1)] +  dTimeScRd; // x-axis
+		hBeamTaggScalers_ProjY = (TH1D*) hBeamTaggScalers -> ProjectionY("hBeamTaggScalers_ProjY", iBeamScRd, iBeamScRd);
+		dBeamRateScRdMean[(iBeamScRd)] = hBeamTaggScalers_ProjY -> Integral() / dTimeScRd  / nCh;
+		for ( Int_t iCh = 1; iCh <= nCh; iCh ++ )
+		{
+			Double_t dBeamScCh = hBeamTaggScalers_ProjY -> GetBinContent(iCh) / dTimeScRd;
+			dBeamScCh = (dBeamScCh - fBkgFitCh[iCh-1] -> Eval(dBeamTimeScRd[(iBeamScRd)])) * dTimeScRd;
+			hBeamTaggScalersExpBkgSub -> SetBinContent(iBeamScRd, iCh, dBeamScCh);
+		}
+	}
+
+	// Finally we can make taggeffs
+	TString sOut = sBeam;
+	sOut.ReplaceAll( "goat", "Output");
+
+	cout << "outfile = " << sOut << endl;
+
+	TFile fOut( sOut, "RECREATE");
+	
+	TH1D *hEffAllHitsExpBkgSub = (TH1D*) hBeamAllHits -> Clone( "TaggEffAllHitsExpBkgSub");
+	TH1D *hEffSinglesExpBkgSub = (TH1D*) hBeamSingles -> Clone( "TaggEffSinglesExpBkgSub");
+	TH1D *hEffDoublesExpBkgSub = (TH1D* )hBeamDoubles -> Clone( "TaggEffDoublesExpBkgSub");
+	TH1D *hEffAccScalExpBkgSub = (TH1D*) hBeamTaggScalersExpBkgSub -> ProjectionY( "TaggEffAccScalExpBkgSub", 0, iBeamnScalerReads);
+	hEffAccScalExpBkgSub -> Sumw2();
+
+	hEffAccScalExpBkgSub -> Scale(dBeamInhib/dBeamClock);
+	hEffAllHitsExpBkgSub -> Divide(hEffAccScalExpBkgSub);
+	hEffSinglesExpBkgSub -> Divide(hEffAccScalExpBkgSub);
+	hEffDoublesExpBkgSub -> Divide(hEffAccScalExpBkgSub);
+
+	hEffAllHitsExpBkgSub -> GetXaxis() -> SetTitle( "Tagger Channel");
+	hEffAllHitsExpBkgSub -> GetYaxis() -> SetTitle( "Tagging Efficiency");
+	hEffSinglesExpBkgSub -> GetXaxis() -> SetTitle( "Tagger Channel");
+	hEffSinglesExpBkgSub -> GetYaxis() -> SetTitle( "Tagging Efficiency");
+	hEffDoublesExpBkgSub -> GetXaxis() -> SetTitle( "Tagger Channel");
+	hEffDoublesExpBkgSub -> GetYaxis() -> SetTitle( "Tagging Efficiency");
+	hEffAccScalExpBkgSub -> GetXaxis() -> SetTitle( "Tagger Channel");
+
+	fOut.cd();
+	fOut.Write();
+	fOut.Close();
+}
+*/
